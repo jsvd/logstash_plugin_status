@@ -1,4 +1,14 @@
-Tool that gives you the status of a logstash plugin. Example:
+Tool that gives you the status of a logstash plugin. It queries github, rubygems and jenkins to provide:
+
+* when was the last commit
+* what is and when was the last tag
+* how far is master compared to last tag
+* last published gem
+* how many issues are open
+* how many tags are open
+* latest build status from jenkins
+
+Example:
 
 ```
 % ruby get_info.rb logstash-output-elasticsearch
