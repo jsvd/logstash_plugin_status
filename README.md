@@ -8,10 +8,11 @@ Tool that gives you the status of a logstash plugin. It queries github, rubygems
 * how many tags are open
 * latest build status from jenkins
 
-Example:
+It will then write that information to an elasticsearch instance.
+
+For each plugin it collects the following information:
 
 ```
-% ruby get_info.rb logstash-output-elasticsearch
 {:last_commit_master=>2015-05-05 00:11:11 UTC,
  :last_tag_name=>"v0.2.4",
  :last_tag_date=>2015-04-21 20:34:54 UTC,
@@ -22,11 +23,22 @@ Example:
  :jenkins_status=>"green"}
 ```
 
-
 Instructions to use:
+
+0. Have an elasticsearch instance running on localhost
+
+1. Populate elasticsearch with plugin status
 
 ```
 % git clone
 % bundle install
-% ruby get_info.rb <plugin_name>
+% bundle exec ruby get_info.rb
 ```
+
+2. Generate static html page with plugin status
+
+```
+% bundle exec ruby gen_webpage.rb > index.html
+```
+
+

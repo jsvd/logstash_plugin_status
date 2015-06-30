@@ -1,0 +1,57 @@
+<table border="1" style="width:100%">
+  <tr>
+    <th>Plugin Name</th>
+    <th>Issues open</th>
+    <th>Pull Requests open</th>
+    <th>Commits Behind Master</th>
+    <th>Jenkins Status</th>
+    <th>Last Published Gem</th>
+    <th>Last Tag</th>
+    <th>Last Commit Master Date</th>
+  </tr>
+<% @data.sort_by {|p| p['_id'] }.each do |plugin| %>
+  <tr>
+    <td>
+      <a
+        title=<%= "Last&nbsp;update:&nbsp;#{plugin['_source']['last_refresh']}" %>
+        href=<%= "http://github.com/logstash-plugins/#{plugin['_id']}" %>
+        >
+        <%= plugin['_id'] %>
+      </a>
+    </td>
+    <% if plugin['_source']['issues_open'] > 4 %>
+    <td bgcolor="#FF0000">
+    <% else %>
+    <td bgcolor="#00DF00">
+    <% end %>
+      <a href=<%= "http://github.com/logstash-plugins/#{plugin['_id']}/issues" %>><%= plugin['_source']['issues_open'] %></a>
+    </td>
+    <% if plugin['_source']['pull_requests_open'] > 2 %>
+    <td bgcolor="#FF0000">
+    <% else %>
+    <td bgcolor="#00DF00">
+    <% end %>
+      <a href=<%= "http://github.com/logstash-plugins/#{plugin['_id']}/pulls" %>><%= plugin['_source']['pull_requests_open'] %></a>
+    </td>
+    <% if (plugin['_source']['commits_behind'] || 0) > 4 %>
+    <td bgcolor="#FF0000">
+    <% else %>
+    <td bgcolor="#00DF00">
+    <% end %>
+      <a href=<%= "http://github.com/logstash-plugins/#{plugin['_id']}/compare/#{plugin['_source']['last_tag_name']}...master" %>><%= plugin['_source']['commits_behind'] %></a>
+    </td>
+    <% if plugin['_source']['jenkins_status'] == "green" %>
+    <td bgcolor="#00DF00">
+    <% elsif plugin['_source']['jenkins_status'] == "red" %>
+    <td bgcolor="#FF0000">
+    <% else %>
+    <td bgcolor="#A6A6A6">
+    <% end %>
+      <a href=<%= "http://build-eu-00.elasticsearch.org/job/#{plugin['_id'].gsub('logstash', 'logstash_plugin').gsub('-', '_')}/lastBuild/console" %>><%= plugin['_source']['jenkins_status'] %></a>
+    </td>
+    <td><a href=<%= "https://rubygems.org/gems/#{plugin['_id']}/versions/#{plugin['_source']['last_published_gem']}" %>><%= plugin['_source']['last_published_gem'] %></a></td>
+    <td><%= plugin['_source']['last_tag_name'] %></td>
+    <td><a href=<%= "http://github.com/logstash-plugins/#{plugin['_id']}/commit/HEAD" %>><%= plugin['_source']['last_commit_master'] %></a></td>
+  </tr>
+<% end %>
+</table>
